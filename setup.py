@@ -7,7 +7,7 @@ setup(
     version="0.0.1",
     packages=find_packages(),
     package_data={
-        package_name: ["data/*"],
+        package_name: ["data/*", "databases/*"],
     },
     install_requires=[
         "sqlalchemy>=2.0.23",
