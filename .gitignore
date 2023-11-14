@@ -1,0 +1,5 @@
+/square_database/data/config.ini
+__pycache__/
+.idea/
+build/
+*.egg-info/
