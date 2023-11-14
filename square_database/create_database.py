@@ -6,9 +6,7 @@ from sqlalchemy import create_engine, text
 from square_logger.main import SquareLogger
 
 from square_database.configuration import config_str_db_ip, config_int_db_port, config_str_db_username, \
-    config_str_db_password, config_str_log_file_name
-
-databases_folder_name = "databases"
+    config_str_db_password, config_str_log_file_name, databases_folder_name, module_name
 
 local_object_square_logger = SquareLogger(config_str_log_file_name)
 
@@ -53,6 +51,7 @@ def create_database_and_tables():
                     else:
                         local_object_square_logger.logger.info(
                             f"{local_str_database_name}.{local_str_schema_name} already exists skipping.")
+                    database_connection.execute(text(f"SET search_path TO {local_str_schema_name}"))
                     table_folder_name = (databases_folder_name + os.sep +
                                          local_str_database_name + os.sep + local_str_schema_name)
                     local_list_table_file_paths = [f for f in os.listdir(table_folder_name) if f != "__init__.py"
@@ -61,7 +60,7 @@ def create_database_and_tables():
                         local_str_table_name = ".".join(local_str_table_file_path.split(".")[0:-1])
                         table_class_name = local_str_table_name.capitalize()
                         table_module_path = \
-                            (f'{__package__}.{databases_folder_name}'
+                            (f'{module_name}.{databases_folder_name}'
                              f'.{local_str_database_name}.{local_str_schema_name}.{local_str_table_name}')
                         table_module = importlib.import_module(table_module_path)
                         table_class = getattr(table_module, table_class_name)

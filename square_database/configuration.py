@@ -7,6 +7,9 @@ config_file_path = (
 )
 config.read(config_file_path)
 
+module_name = "square_database"
+databases_folder_name = "databases"
+
 # get all vars and typecast
 
 config_str_host_ip = config.get("ENVIRONMENT", "HOST_IP")

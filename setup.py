@@ -7,13 +7,14 @@ setup(
     version="0.0.1",
     packages=find_packages(),
     package_data={
-        package_name: ["data/*", "databases/*"],
+        package_name: ["data/*", "databases/*", "pydantic_models/*"],
     },
     install_requires=[
         "sqlalchemy>=2.0.23",
         "psycopg>=2.9.9",
         "uvicorn>=0.24.0.post1",
         "fastapi>=0.104.1",
+        "python-multipart>=0.0.6",
         "square_logger~=1.0",
     ],
     author="thePmSquare",
