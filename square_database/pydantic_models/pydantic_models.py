@@ -16,8 +16,15 @@ class SchemaEnum(str, Enum):
     public = "public"
 
 
-class InsertRow(BaseModel):
+class InsertRows(BaseModel):
     database_name: DatabasesEnum
     table_name: TablesEnum
     schema_name: SchemaEnum
     data: List[dict]
+
+
+class GetRows(BaseModel):
+    database_name: DatabasesEnum
+    table_name: TablesEnum
+    schema_name: SchemaEnum
+    filters: dict
