@@ -79,7 +79,7 @@ async def insert_rows(insert_rows_model: InsertRows):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 
-@app.post("/get_rows", status_code=status.HTTP_201_CREATED)
+@app.post("/get_rows", status_code=status.HTTP_200_OK)
 @local_object_square_logger.async_auto_logger
 async def get_rows(get_rows_model: GetRows):
     try:
@@ -115,7 +115,7 @@ async def get_rows(get_rows_model: GetRows):
                 session.commit()
                 session.close()
 
-                return JSONResponse(status_code=status.HTTP_201_CREATED,
+                return JSONResponse(status_code=status.HTTP_200_OK,
                                     content=json.loads(json.dumps(local_list_filtered_rows, default=str)))
             except Exception as e:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
