@@ -3,6 +3,7 @@ import os
 
 from psycopg2.errors import DuplicateDatabase
 from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
 from square_logger.main import SquareLogger
 
 from square_database.configuration import config_str_db_ip, config_int_db_port, config_str_db_username, \
@@ -67,10 +68,21 @@ def create_database_and_tables():
 
                         if not database_engine.dialect.has_table(database_connection, table_class.__tablename__):
                             table_class.__table__.create(database_connection)
+                            database_connection.execute(text("commit"))
+                            if hasattr(table_class, "__default_data__"):
+                                local_object_session = sessionmaker(bind=database_engine)
+                                session = local_object_session()
+
+                                for row_dict in table_class.__default_data__:
+                                    new_row = table_class(**row_dict)
+                                    session.add(new_row)
+                                session.commit()
+                                session.close()
                         else:
                             local_object_square_logger.logger.info(
                                 f"{local_str_database_name}.{local_str_schema_name}.{local_str_table_name} "
                                 f"already exists, skipping.")
+
                 database_connection.execute(text("commit"))
 
     except Exception:
