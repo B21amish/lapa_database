@@ -12,6 +12,7 @@ class DatabasesEnum(str, Enum):
 class TablesEnum(str, Enum):
     file = "file"
     game = "game"
+    game_instance = "game_instance"
 
 
 class SchemaEnum(str, Enum):

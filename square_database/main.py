@@ -17,7 +17,7 @@ from square_database.configuration import (
     config_str_log_file_name, config_bool_create_schema, config_int_db_port, config_str_db_ip, config_str_db_username,
     config_str_db_password, databases_folder_name, module_name
 )
-from square_database.create_database import create_database_and_tables
+from square_database.create_database import create_database_and_tables, snake_to_capital_camel
 from square_database.pydantic_models.pydantic_models import InsertRows, GetRows
 
 local_object_square_logger = SquareLogger(config_str_log_file_name)
@@ -47,7 +47,7 @@ async def insert_rows(insert_rows_model: InsertRows):
             except OperationalError:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="incorrect schema name.")
             try:
-                table_class_name = insert_rows_model.table_name.value.capitalize()
+                table_class_name = snake_to_capital_camel(insert_rows_model.table_name.value)
                 table_module_path = \
                     (f'{module_name}.{databases_folder_name}.{insert_rows_model.database_name.value}'
                      f'.{insert_rows_model.schema_name.value}.{insert_rows_model.table_name.value}')
@@ -94,7 +94,7 @@ async def get_rows(get_rows_model: GetRows):
             except OperationalError:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="incorrect schema name.")
             try:
-                table_class_name = get_rows_model.table_name.value.capitalize()
+                table_class_name = snake_to_capital_camel(get_rows_model.table_name.value)
                 table_module_path = \
                     (f'{module_name}.{databases_folder_name}.{get_rows_model.database_name.value}'
                      f'.{get_rows_model.schema_name.value}.{get_rows_model.table_name.value}')

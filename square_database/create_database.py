@@ -12,6 +12,13 @@ from square_database.configuration import config_str_db_ip, config_int_db_port, 
 local_object_square_logger = SquareLogger(config_str_log_file_name)
 
 
+def snake_to_capital_camel(snake_str):
+    components = snake_str.split('_')
+    # Capitalize the first letter of each component except the first one
+    camel_case = ''.join(x.title() for x in components)
+    return camel_case
+
+
 @local_object_square_logger.auto_logger
 def create_database_and_tables():
     try:
@@ -59,7 +66,7 @@ def create_database_and_tables():
                                                    and not os.path.isdir(os.path.join(schema_folder_name, f))]
                     for local_str_table_file_path in local_list_table_file_paths:
                         local_str_table_name = ".".join(local_str_table_file_path.split(".")[0:-1])
-                        table_class_name = local_str_table_name.capitalize()
+                        table_class_name = snake_to_capital_camel(local_str_table_name)
                         table_module_path = \
                             (f'{module_name}.{databases_folder_name}'
                              f'.{local_str_database_name}.{local_str_schema_name}.{local_str_table_name}')
