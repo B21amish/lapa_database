@@ -31,3 +31,18 @@ class GetRows(BaseModel):
     table_name: TablesEnum
     schema_name: SchemaEnum
     filters: dict
+
+
+class EditRows(BaseModel):
+    database_name: DatabasesEnum
+    table_name: TablesEnum
+    schema_name: SchemaEnum
+    filters: dict
+    data: dict
+
+
+class DeleteRows(BaseModel):
+    database_name: DatabasesEnum
+    table_name: TablesEnum
+    schema_name: SchemaEnum
+    filters: dict

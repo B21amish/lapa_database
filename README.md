@@ -26,5 +26,8 @@ TBD
 ### v0.0.1
 
 - initial implementation.
+- known bugs
+    - unoptimised session commits and rollbacks especially on edit_rows
+    - auto increment not working
 
 ## Feedback is appreciated. Thank you!

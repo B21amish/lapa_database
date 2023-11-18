@@ -18,7 +18,7 @@ from square_database.configuration import (
     config_str_db_password, databases_folder_name, module_name
 )
 from square_database.create_database import create_database_and_tables, snake_to_capital_camel
-from square_database.pydantic_models.pydantic_models import InsertRows, GetRows
+from square_database.pydantic_models.pydantic_models import InsertRows, GetRows, EditRows, DeleteRows
 
 local_object_square_logger = SquareLogger(config_str_log_file_name)
 
@@ -70,6 +70,8 @@ async def insert_rows(insert_rows_model: InsertRows):
                 return JSONResponse(status_code=status.HTTP_201_CREATED,
                                     content=json.loads(json.dumps(return_this, default=str)))
             except Exception as e:
+                session.rollback()
+                session.close()
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except HTTPException:
         raise
@@ -118,6 +120,113 @@ async def get_rows(get_rows_model: GetRows):
                 return JSONResponse(status_code=status.HTTP_200_OK,
                                     content=json.loads(json.dumps(local_list_filtered_rows, default=str)))
             except Exception as e:
+                session.rollback()
+                session.close()
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    except HTTPException:
+        raise
+    except OperationalError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="incorrect database name.")
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
+
+@app.put("/edit_rows", status_code=status.HTTP_200_OK)
+@local_object_square_logger.async_auto_logger
+async def edit_rows(edit_rows_model: EditRows):
+    try:
+        local_str_database_url = \
+            (f'postgresql://{config_str_db_username}:{config_str_db_password}@'
+             f'{config_str_db_ip}:{str(config_int_db_port)}/{edit_rows_model.database_name.value}')
+        database_engine = create_engine(local_str_database_url)
+        with (database_engine.connect() as database_connection):
+            try:
+                database_connection.execute(text(f"SET search_path TO {edit_rows_model.schema_name.value}"))
+
+            except OperationalError:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="incorrect schema name.")
+            try:
+                table_class_name = snake_to_capital_camel(edit_rows_model.table_name.value)
+                table_module_path = \
+                    (f'{module_name}.{databases_folder_name}.{edit_rows_model.database_name.value}'
+                     f'.{edit_rows_model.schema_name.value}.{edit_rows_model.table_name.value}')
+                table_module = importlib.import_module(table_module_path)
+                table_class = getattr(table_module, table_class_name)
+            except Exception:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="incorrect table name.")
+            local_object_session = sessionmaker(bind=database_engine)
+            session = local_object_session()
+            try:
+                query = session.query(table_class)
+                for key, value in edit_rows_model.filters.items():
+                    query = query.filter(getattr(table_class, key) == value)
+
+                filtered_rows = query.all()
+                for row in filtered_rows:
+                    for key, value in edit_rows_model.data.items():
+                        setattr(row, key, value)
+                        session.commit()
+                        session.refresh(row)
+                local_list_filtered_rows = [{key: value for key, value in x.__dict__.items() if not key.startswith('_')}
+                                            for x in filtered_rows]
+                session.close()
+
+                return JSONResponse(status_code=status.HTTP_200_OK,
+                                    content=json.loads(json.dumps(local_list_filtered_rows, default=str)))
+            except Exception as e:
+                session.rollback()
+                session.close()
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    except HTTPException:
+        raise
+    except OperationalError:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="incorrect database name.")
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
+
+@app.delete("/delete_rows", status_code=status.HTTP_200_OK)
+@local_object_square_logger.async_auto_logger
+async def delete_rows(delete_rows_model: DeleteRows):
+    try:
+        local_str_database_url = \
+            (f'postgresql://{config_str_db_username}:{config_str_db_password}@'
+             f'{config_str_db_ip}:{str(config_int_db_port)}/{delete_rows_model.database_name.value}')
+        database_engine = create_engine(local_str_database_url)
+        with (database_engine.connect() as database_connection):
+            try:
+                database_connection.execute(text(f"SET search_path TO {delete_rows_model.schema_name.value}"))
+
+            except OperationalError:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="incorrect schema name.")
+            try:
+                table_class_name = snake_to_capital_camel(delete_rows_model.table_name.value)
+                table_module_path = \
+                    (f'{module_name}.{databases_folder_name}.{delete_rows_model.database_name.value}'
+                     f'.{delete_rows_model.schema_name.value}.{delete_rows_model.table_name.value}')
+                table_module = importlib.import_module(table_module_path)
+                table_class = getattr(table_module, table_class_name)
+            except Exception:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="incorrect table name.")
+            local_object_session = sessionmaker(bind=database_engine)
+            session = local_object_session()
+            try:
+                query = session.query(table_class)
+                for key, value in delete_rows_model.filters.items():
+                    query = query.filter(getattr(table_class, key) == value)
+
+                filtered_rows = query.all()
+                local_list_filtered_rows = [{key: value for key, value in x.__dict__.items() if not key.startswith('_')}
+                                            for x in filtered_rows]
+                query.delete()
+                session.commit()
+                session.close()
+
+                return JSONResponse(status_code=status.HTTP_200_OK,
+                                    content=json.loads(json.dumps(local_list_filtered_rows, default=str)))
+            except Exception as e:
+                session.rollback()
+                session.close()
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except HTTPException:
         raise
