@@ -4,6 +4,8 @@ from sqlalchemy.sql import func
 
 Base = declarative_base()
 
+data_to_insert = []
+
 
 class File(Base):
     __tablename__ = 'file'

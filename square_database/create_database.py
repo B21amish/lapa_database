@@ -2,7 +2,7 @@ import importlib
 import os
 
 from psycopg2.errors import DuplicateDatabase
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, inspect
 from sqlalchemy.orm import sessionmaker
 from square_logger.main import SquareLogger
 
@@ -10,13 +10,6 @@ from square_database.configuration import config_str_db_ip, config_int_db_port, 
     config_str_db_password, config_str_log_file_name, databases_folder_name, module_name
 
 local_object_square_logger = SquareLogger(config_str_log_file_name)
-
-
-def snake_to_capital_camel(snake_str):
-    components = snake_str.split('_')
-    # Capitalize the first letter of each component except the first one
-    camel_case = ''.join(x.title() for x in components)
-    return camel_case
 
 
 @local_object_square_logger.auto_logger
@@ -28,21 +21,22 @@ def create_database_and_tables():
 
         local_list_database_names = [f for f in os.listdir(databases_folder_name) if
                                      os.path.isdir(os.path.join(databases_folder_name, f)) and f != "__pycache__"]
-
         for local_str_database_name in local_list_database_names:
             local_str_postgres_url = \
                 (f'postgresql://{config_str_db_username}:{config_str_db_password}@'
                  f'{config_str_db_ip}:{str(config_int_db_port)}/')
             postgres_engine = create_engine(local_str_postgres_url)
+            # Create database if not exists
             try:
                 with postgres_engine.connect() as postgres_connection:
                     postgres_connection.execute(text("commit"))
                     postgres_connection.execute(text(f"CREATE DATABASE {local_str_database_name}"))
             except Exception as e:
-                if isinstance(e.orig, DuplicateDatabase):
-                    local_object_square_logger.logger.info(f"{local_str_database_name} already exists skipping.")
+                if isinstance(getattr(e, "orig"), DuplicateDatabase):
+                    local_object_square_logger.logger.info(f"{local_str_database_name} already exists.")
                 else:
                     raise
+            # ===========================================
             schema_folder_name = databases_folder_name + os.sep + local_str_database_name
             local_list_schema_names = [f for f in os.listdir(schema_folder_name) if
                                        os.path.isdir(os.path.join(schema_folder_name, f)) and f != "__pycache__"]
@@ -53,44 +47,45 @@ def create_database_and_tables():
             database_engine = create_engine(local_str_database_url)
             with (database_engine.connect() as database_connection):
                 for local_str_schema_name in local_list_schema_names:
+                    # Create schema if not exists
                     if not database_engine.dialect.has_schema(database_connection, local_str_schema_name):
                         database_connection.execute(text("commit"))
                         database_connection.execute(text(f"CREATE SCHEMA {local_str_schema_name}"))
                     else:
                         local_object_square_logger.logger.info(
-                            f"{local_str_database_name}.{local_str_schema_name} already exists skipping.")
+                            f"{local_str_database_name}.{local_str_schema_name} already exists.")
+                    # ===========================================
                     database_connection.execute(text(f"SET search_path TO {local_str_schema_name}"))
-                    table_folder_name = (databases_folder_name + os.sep +
-                                         local_str_database_name + os.sep + local_str_schema_name)
-                    local_list_table_file_paths = [f for f in os.listdir(table_folder_name) if f != "__init__.py"
-                                                   and not os.path.isdir(os.path.join(schema_folder_name, f))]
-                    for local_str_table_file_path in local_list_table_file_paths:
-                        local_str_table_name = ".".join(local_str_table_file_path.split(".")[0:-1])
-                        table_class_name = snake_to_capital_camel(local_str_table_name)
-                        table_module_path = \
-                            (f'{module_name}.{databases_folder_name}'
-                             f'.{local_str_database_name}.{local_str_schema_name}.{local_str_table_name}')
-                        table_module = importlib.import_module(table_module_path)
-                        table_class = getattr(table_module, table_class_name)
 
-                        if not database_engine.dialect.has_table(database_connection, table_class.__tablename__):
-                            table_class.__table__.create(database_connection)
-                            database_connection.execute(text("commit"))
-                            if hasattr(table_class, "__default_data__"):
-                                local_object_session = sessionmaker(bind=database_engine)
-                                session = local_object_session()
+                    inspector = inspect(database_engine)
+                    existing_table_names = inspector.get_table_names()
 
-                                for row_dict in table_class.__default_data__:
-                                    new_row = table_class(**row_dict)
-                                    session.add(new_row)
-                                session.commit()
-                                session.close()
-                        else:
-                            local_object_square_logger.logger.info(
-                                f"{local_str_database_name}.{local_str_schema_name}.{local_str_table_name} "
-                                f"already exists, skipping.")
-
-                database_connection.execute(text("commit"))
+                    tables_module_path = \
+                        (f'{module_name}.{databases_folder_name}'
+                         f'.{local_str_database_name}.{local_str_schema_name}.tables')
+                    tables_module = importlib.import_module(tables_module_path)
+                    base = getattr(tables_module, "Base")
+                    # Create tables if not exists
+                    base.metadata.create_all(database_engine)
+                    # ===========================================
+                    data_to_insert = getattr(tables_module, "data_to_insert")
+                    local_object_session = sessionmaker(bind=database_engine)
+                    session = local_object_session()
+                    filtered_data_to_insert = [x for x in data_to_insert if x.__tablename__ not in existing_table_names]
+                    # insert data for newly created tables
+                    try:
+                        session.add_all(filtered_data_to_insert)
+                        # ===========================================
+                        session.commit()
+                        session.close()
+                    except Exception:
+                        session.rollback()
+                        session.close()
+                        raise
+                    if len(existing_table_names) > 0:
+                        local_object_square_logger.logger.info(
+                            f"skipping default data entries for {local_str_database_name}.{local_str_schema_name} "
+                            f"tables: {", ".join(existing_table_names)}.")
 
     except Exception:
         raise
