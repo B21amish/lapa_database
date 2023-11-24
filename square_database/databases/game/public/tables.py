@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Sequence, DateTime, func, ForeignKey, String
+from sqlalchemy import Column, Integer, DateTime, func, ForeignKey, String
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
@@ -9,7 +9,7 @@ data_to_insert = []
 class Game(Base):
     __tablename__ = 'game'
 
-    game_id = Column(Integer, Sequence('game_id_seq'), primary_key=True, index=True)
+    game_id = Column(Integer, autoincrement=True, primary_key=True, index=True)
     game_name = Column(String, nullable=False, unique=True)
 
 
@@ -21,7 +21,7 @@ data_to_insert.extend([
 class GameInstance(Base):
     __tablename__ = 'game_instance'
 
-    game_instance_id = Column(Integer, Sequence('game_instance_seq'), primary_key=True, index=True)
+    game_instance_id = Column(Integer, autoincrement=True, primary_key=True, index=True)
     game_id = Column(Integer, ForeignKey(Game.game_id, ondelete="RESTRICT", onupdate="RESTRICT"), index=True,
                      nullable=False)
     game_instance_date_created = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -32,7 +32,7 @@ class GameInstance(Base):
 class Player(Base):
     __tablename__ = 'player'
 
-    player_id = Column(Integer, Sequence('player_seq'), primary_key=True, index=True)
+    player_id = Column(Integer, autoincrement=True, primary_key=True, index=True)
     player_name = Column(String, nullable=False)
     player_date_created = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
@@ -40,7 +40,7 @@ class Player(Base):
 class GameInstancePlayer(Base):
     __tablename__ = 'game_instance_player'
 
-    game_instance_player_id = Column(Integer, Sequence('game_instance_player_seq'), primary_key=True, index=True)
+    game_instance_player_id = Column(Integer, autoincrement=True, primary_key=True, index=True)
     game_instance_id = Column(Integer,
                               ForeignKey(GameInstance.game_instance_id, ondelete="RESTRICT", onupdate="RESTRICT"),
                               index=True,

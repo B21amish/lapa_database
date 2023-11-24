@@ -50,6 +50,5 @@ to make it accessible through api calls.**
 - initial implementation.
 - known bugs
     - creating engines everytime on fastapi route call is creating idle sessions.
-    - auto increment constraint is being applied in database.
 
 ## Feedback is appreciated. Thank you!
