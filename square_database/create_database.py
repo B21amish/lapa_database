@@ -7,10 +7,12 @@ from sqlalchemy.orm import sessionmaker
 from square_logger.main import SquareLogger
 
 from square_database.configuration import config_str_db_ip, config_int_db_port, config_str_db_username, \
-    config_str_db_password, config_str_log_file_name, databases_folder_name, module_name
+    config_str_db_password, config_str_log_file_name, module_name, config_database_module_name, databases_folder_name
 
 local_object_square_logger = SquareLogger(config_str_log_file_name)
 
+database_module = importlib.import_module(config_database_module_name)
+database_module_dirctory =  os.path.dirname(database_module.__file__)
 
 @local_object_square_logger.auto_logger
 def create_database_and_tables():
@@ -19,8 +21,8 @@ def create_database_and_tables():
         local_object_square_logger.logger.info(
             f"Creating databases, schemas and tables at database ip: {config_str_db_ip}:{config_int_db_port}.")
 
-        local_list_database_names = [f for f in os.listdir(databases_folder_name) if
-                                     os.path.isdir(os.path.join(databases_folder_name, f)) and f != "__pycache__"]
+        local_list_database_names = [f for f in os.listdir(database_module_dirctory) if
+                                     os.path.isdir(os.path.join(database_module_dirctory, f)) and f != "__pycache__"]
         for local_str_database_name in local_list_database_names:
             local_str_postgres_url = \
                 (f'postgresql://{config_str_db_username}:{config_str_db_password}@'
