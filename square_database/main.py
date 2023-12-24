@@ -15,7 +15,7 @@ from square_database.configuration import (
     config_int_host_port,
     config_str_host_ip,
     config_str_log_file_name, config_bool_create_schema, config_int_db_port, config_str_db_ip, config_str_db_username,
-    config_str_db_password, databases_folder_name, module_name
+    config_str_db_password, config_str_database_module_name
 )
 from square_database.create_database import create_database_and_tables
 from square_database.pydantic_models.pydantic_models import InsertRows, GetRows, EditRows, DeleteRows
@@ -61,7 +61,7 @@ async def insert_rows(insert_rows_model: InsertRows):
             try:
                 table_class_name = snake_to_capital_camel(insert_rows_model.table_name.value)
                 table_module_path = \
-                    (f'{module_name}.{databases_folder_name}.{insert_rows_model.database_name.value}'
+                    (f'{config_str_database_module_name}.{insert_rows_model.database_name.value}'
                      f'.{insert_rows_model.schema_name.value}.tables')
                 table_module = importlib.import_module(table_module_path)
                 table_class = getattr(table_module, table_class_name)
@@ -114,7 +114,7 @@ async def get_rows(get_rows_model: GetRows):
             try:
                 table_class_name = snake_to_capital_camel(get_rows_model.table_name.value)
                 table_module_path = \
-                    (f'{module_name}.{databases_folder_name}.{get_rows_model.database_name.value}'
+                    (f'{config_str_database_module_name}.{get_rows_model.database_name.value}'
                      f'.{get_rows_model.schema_name.value}.tables')
                 table_module = importlib.import_module(table_module_path)
                 table_class = getattr(table_module, table_class_name)
@@ -168,7 +168,7 @@ async def edit_rows(edit_rows_model: EditRows):
             try:
                 table_class_name = snake_to_capital_camel(edit_rows_model.table_name.value)
                 table_module_path = \
-                    (f'{module_name}.{databases_folder_name}.{edit_rows_model.database_name.value}'
+                    (f'{config_str_database_module_name}.{edit_rows_model.database_name.value}'
                      f'.{edit_rows_model.schema_name.value}.tables')
                 table_module = importlib.import_module(table_module_path)
                 table_class = getattr(table_module, table_class_name)
@@ -231,7 +231,7 @@ async def delete_rows(delete_rows_model: DeleteRows):
             try:
                 table_class_name = snake_to_capital_camel(delete_rows_model.table_name.value)
                 table_module_path = \
-                    (f'{module_name}.{databases_folder_name}.{delete_rows_model.database_name.value}'
+                    (f'{config_str_database_module_name}.{delete_rows_model.database_name.value}'
                      f'.{delete_rows_model.schema_name.value}.tables')
                 table_module = importlib.import_module(table_module_path)
                 table_class = getattr(table_module, table_class_name)

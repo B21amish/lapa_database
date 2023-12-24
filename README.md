@@ -6,33 +6,17 @@ database layer for my personal server.
 
 ## installation
 
-> pip install square_database
+> pip install square_database[all]
 
-## usage
+## usage (WIP)
 
-### to add a new database
+### config.example.ini to config.ini.
 
-- add package in databases package with database name and run main.py file with config variable CREATE_SCHEMA = True.
+### CREATE_SCHEMA = True to create database from scratch.
 
-### to add a new schema
+### LOG_FILE_NAME and configure logger
 
-- add package in databases/database_name package with schema name and run main.py file with config variable
-  CREATE_SCHEMA = True.
-
-### to add a new table
-
-- create databases/database_name/schema_name/tables.py file if not already created.
-- create class corresponding to your new table add in databases/database_name/schema_name/tables.py file and run main.py
-  file with config variable CREATE_SCHEMA = True
-
-### to add default data in table
-
-- append row objects containing your default data to the data_to_insert list inside the
-  databases/database_name/schema_name/tables.py file and run main.py
-  file with config variable CREATE_SCHEMA = True
-
-**do not forget to add new database_names, schema_names and/or table_names to pydantic_models/pydantic_models.py enums
-to make it accessible through api calls.**
+### link to database_structure
 
 ## configs
 
@@ -44,6 +28,13 @@ to make it accessible through api calls.**
 - python>=3.12.0
 
 ## changelog
+
+### v0.0.2
+
+- remove databases folder and enums related to tables and put in separate module for better version control.
+- add proper error message display on errors in configuration.py.
+- known bugs
+    - creating engines everytime on fastapi route call is creating idle sessions.
 
 ### v0.0.1
 

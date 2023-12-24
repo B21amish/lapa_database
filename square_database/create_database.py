@@ -7,12 +7,12 @@ from sqlalchemy.orm import sessionmaker
 from square_logger.main import SquareLogger
 
 from square_database.configuration import config_str_db_ip, config_int_db_port, config_str_db_username, \
-    config_str_db_password, config_str_log_file_name, module_name, config_database_module_name, databases_folder_name
+    config_str_db_password, config_str_log_file_name, database_structure_module, config_str_database_module_name
 
 local_object_square_logger = SquareLogger(config_str_log_file_name)
 
-database_module = importlib.import_module(config_database_module_name)
-database_module_dirctory =  os.path.dirname(database_module.__file__)
+database_module_dirctory = os.path.dirname(database_structure_module.__file__)
+
 
 @local_object_square_logger.auto_logger
 def create_database_and_tables():
@@ -39,7 +39,7 @@ def create_database_and_tables():
                 else:
                     raise
             # ===========================================
-            schema_folder_name = databases_folder_name + os.sep + local_str_database_name
+            schema_folder_name = database_module_dirctory + os.sep + local_str_database_name
             local_list_schema_names = [f for f in os.listdir(schema_folder_name) if
                                        os.path.isdir(os.path.join(schema_folder_name, f)) and f != "__pycache__"]
 
@@ -63,7 +63,7 @@ def create_database_and_tables():
                     existing_table_names = inspector.get_table_names()
 
                     tables_module_path = \
-                        (f'{module_name}.{databases_folder_name}'
+                        (f'{config_str_database_module_name}'
                          f'.{local_str_database_name}.{local_str_schema_name}.tables')
                     tables_module = importlib.import_module(tables_module_path)
                     base = getattr(tables_module, "Base")
