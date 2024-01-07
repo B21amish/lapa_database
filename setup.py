@@ -16,14 +16,15 @@ setup(
         "fastapi>=0.104.1",
         "python-multipart>=0.0.6",
         "square_logger~=1.0",
+        "websockets>=12.0"
     ],
     extras_require={
         'all': [
             'database_structure~=0.0.1',
         ],
     },
-    author="thePmSquare, Amish Palkar",
-    author_email="thepmsquare@gmail.com, amishpalkar302001@gmail.com",
+    author="thePmSquare, Amish Palkar, Lav Sharma",
+    author_email="thepmsquare@gmail.com, amishpalkar302001@gmail.com, lavsharma2016@gmail.com",
     description="database layer for my personal server.",
     long_description=open("README.md", "r").read(),
     long_description_content_type="text/markdown",
