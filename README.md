@@ -44,13 +44,13 @@ database layer for my personal server.
 
 - remove databases folder and enums related to tables and put in separate module for better version control.
 - add proper error message display on errors in configuration.py.
-- known bugs
+- known bugs:
     - creating engines everytime on fastapi route call is creating idle sessions.
 
 ### v0.0.1
 
 - initial implementation.
-- known bugs
+- known bugs:
     - creating engines everytime on fastapi route call is creating idle sessions.
 
 ## Feedback is appreciated. Thank you!
