@@ -2,7 +2,7 @@ from typing import List
 
 from pydantic import BaseModel
 
-from square_database.configuration import database_structure_main_file
+from lapa_database.configuration import database_structure_main_file
 
 
 class InsertRows(BaseModel):
