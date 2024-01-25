@@ -4,7 +4,7 @@ package_name = "lapa_database"
 
 setup(
     name=package_name,
-    version="0.0.3",
+    version="0.0.4",
     packages=find_packages(),
     package_data={
         package_name: ["data/*", "pydantic_models/*"],
@@ -20,7 +20,7 @@ setup(
     ],
     extras_require={
         "all": [
-            "database_structure~=0.0.1",
+            "lapa_database_structure~=0.0.1",
         ],
     },
     author="thePmSquare, Amish Palkar, Lav Sharma",
