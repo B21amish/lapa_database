@@ -87,7 +87,7 @@ def create_database_and_tables():
                     if len(existing_table_names) > 0:
                         local_object_square_logger.logger.info(
                             f"skipping default data entries for {local_str_database_name}.{local_str_schema_name} "
-                            f"tables: {", ".join(existing_table_names)}.")
+                            f"tables: {', '.join(existing_table_names)}.")
 
     except Exception:
         raise
