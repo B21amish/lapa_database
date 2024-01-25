@@ -11,11 +11,11 @@ from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import sessionmaker
 from square_logger.main import SquareLogger
 
-from square_database.configuration import (
+from lapa_database.configuration import (
     config_str_log_file_name, config_int_db_port, config_str_db_ip, config_str_db_username,
     config_str_db_password, config_str_database_module_name
 )
-from square_database.utils.CommonOperations import snake_to_capital_camel
+from lapa_database.utils.CommonOperations import snake_to_capital_camel
 
 local_object_square_logger = SquareLogger(config_str_log_file_name)
 

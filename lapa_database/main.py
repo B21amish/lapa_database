@@ -273,7 +273,7 @@ async def delete_rows(delete_rows_model: DeleteRows):
 @local_object_square_logger.async_auto_logger
 async def root():
     return JSONResponse(status_code=status.HTTP_200_OK,
-                        content={"text": "square_database"})
+                        content={"text": "lapa_database"})
 
 
 @app.websocket("/ws/{database_name}/{table_name}/{schema_name}")
