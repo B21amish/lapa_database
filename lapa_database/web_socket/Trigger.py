@@ -1,7 +1,7 @@
 import psycopg2
 from square_logger.main import SquareLogger
 
-from square_database.configuration import (
+from lapa_database.configuration import (
     config_str_log_file_name
 )
 

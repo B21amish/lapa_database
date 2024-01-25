@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-package_name = "square_database"
+package_name = "lapa_database"
 
 setup(
     name=package_name,

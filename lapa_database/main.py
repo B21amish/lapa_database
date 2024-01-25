@@ -14,17 +14,17 @@ from square_logger.main import SquareLogger
 from starlette.websockets import WebSocketState
 from uvicorn import run
 
-from square_database.configuration import (
+from lapa_database.configuration import (
     config_int_host_port,
     config_str_host_ip,
     config_str_log_file_name, config_bool_create_schema, config_int_db_port, config_str_db_ip, config_str_db_username,
     config_str_db_password, config_str_database_module_name
 )
-from square_database.create_database import create_database_and_tables
-from square_database.pydantic_models.pydantic_models import InsertRows, GetRows, EditRows, DeleteRows
-from square_database.utils.CommonOperations import snake_to_capital_camel
-from square_database.web_socket.Trigger import create_trigger_in_db
-from square_database.web_socket.WebsocketOperation import run_listen_for_changes
+from lapa_database.create_database import create_database_and_tables
+from lapa_database.pydantic_models.pydantic_models import InsertRows, GetRows, EditRows, DeleteRows
+from lapa_database.utils.CommonOperations import snake_to_capital_camel
+from lapa_database.web_socket.Trigger import create_trigger_in_db
+from lapa_database.web_socket.WebsocketOperation import run_listen_for_changes
 
 local_object_square_logger = SquareLogger(config_str_log_file_name)
 
@@ -273,7 +273,7 @@ async def delete_rows(delete_rows_model: DeleteRows):
 @local_object_square_logger.async_auto_logger
 async def root():
     return JSONResponse(status_code=status.HTTP_200_OK,
-                        content={"text": "square_database"})
+                        content={"text": "lapa_database"})
 
 
 @app.websocket("/ws/{database_name}/{table_name}/{schema_name}")

@@ -6,7 +6,7 @@ from sqlalchemy import create_engine, text, inspect
 from sqlalchemy.orm import sessionmaker
 from square_logger.main import SquareLogger
 
-from square_database.configuration import config_str_db_ip, config_int_db_port, config_str_db_username, \
+from lapa_database.configuration import config_str_db_ip, config_int_db_port, config_str_db_username, \
     config_str_db_password, config_str_log_file_name, database_structure_module, config_str_database_module_name
 
 local_object_square_logger = SquareLogger(config_str_log_file_name)
@@ -87,7 +87,7 @@ def create_database_and_tables():
                     if len(existing_table_names) > 0:
                         local_object_square_logger.logger.info(
                             f"skipping default data entries for {local_str_database_name}.{local_str_schema_name} "
-                            f"tables: {", ".join(existing_table_names)}.")
+                            f"tables: {', '.join(existing_table_names)}.")
 
     except Exception:
         raise
