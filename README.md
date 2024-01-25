@@ -1,4 +1,4 @@
-# square_database
+# lapa_database
 
 ## about
 
@@ -6,7 +6,7 @@ database layer for my personal server.
 
 ## installation
 
-> pip install square_database[all]
+> pip install lapa_database[all]
 
 ## usage (WIP)
 
@@ -16,12 +16,12 @@ database layer for my personal server.
 
 ### LOG_FILE_NAME and configure logger
 
-### link to database_structure
+### link to lapa_database_structure
 
 ## configs
 
-1. square_database\data\config.ini (can be created using square_database\data\config.example.ini)
-2. square_logger\data\config.ini
+1. lapa_database\data\config.ini (can be created using lapa_database\data\config.example.ini)
+2. lapa_logger\data\config.ini
 
 ## env
 
