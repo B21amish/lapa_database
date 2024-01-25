@@ -29,6 +29,13 @@ database layer for my personal server.
 
 ## changelog
 
+### v0.0.4
+
+- rename to lapa database.
+- fix bug in create_database that occured in default data insertion.
+- add logs to gitignore.
+- change psycopg2 to psycopg2-binary in setup.py.
+
 ### v0.0.3
 
 - created utils folder containing CommonOperations.py under which the common functions used across modules are stored.
@@ -45,12 +52,12 @@ database layer for my personal server.
 - remove databases folder and enums related to tables and put in separate module for better version control.
 - add proper error message display on errors in configuration.py.
 - known bugs:
-    - creating engines everytime on fastapi route call is creating idle sessions.
+  - creating engines everytime on fastapi route call is creating idle sessions.
 
 ### v0.0.1
 
 - initial implementation.
 - known bugs:
-    - creating engines everytime on fastapi route call is creating idle sessions.
+  - creating engines everytime on fastapi route call is creating idle sessions.
 
 ## Feedback is appreciated. Thank you!
