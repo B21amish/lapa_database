@@ -17,6 +17,7 @@ class GetRows(BaseModel):
     table_name: database_structure_main_file.TablesEnum
     schema_name: database_structure_main_file.SchemaEnum
     filters: dict
+    ignore_filters_and_get_all: bool = True
 
 
 class EditRows(BaseModel):
@@ -25,6 +26,7 @@ class EditRows(BaseModel):
     schema_name: database_structure_main_file.SchemaEnum
     filters: dict
     data: dict
+    ignore_filters_and_edit_all: bool = False
 
 
 class DeleteRows(BaseModel):
@@ -32,3 +34,4 @@ class DeleteRows(BaseModel):
     table_name: database_structure_main_file.TablesEnum
     schema_name: database_structure_main_file.SchemaEnum
     filters: dict
+    ignore_filters_and_delete_all: bool = False

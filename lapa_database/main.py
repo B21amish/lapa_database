@@ -168,11 +168,19 @@ async def get_rows(get_rows_model: GetRows):
             session = local_object_session()
             try:
                 # get rows
-                query = session.query(table_class)
-                for key, value in get_rows_model.filters.items():
-                    query = query.filter(getattr(table_class, key) == value)
+                if get_rows_model.ignore_filters_and_get_all:
+                    query = session.query(table_class)
+                    filtered_rows = query.all()
+                else:
+                    if not get_rows_model.filters:
+                        query = None
+                        filtered_rows = []
+                    else:
+                        query = session.query(table_class)
+                        for key, value in get_rows_model.filters.items():
+                            query = query.filter(getattr(table_class, key) == value)
 
-                filtered_rows = query.all()
+                        filtered_rows = query.all()
                 # ===========================================
                 local_list_filtered_rows = [
                     {
@@ -250,11 +258,19 @@ async def edit_rows(edit_rows_model: EditRows):
             session = local_object_session()
             try:
                 # Get rows from filters
-                query = session.query(table_class)
-                for key, value in edit_rows_model.filters.items():
-                    query = query.filter(getattr(table_class, key) == value)
+                if edit_rows_model.ignore_filters_and_edit_all:
+                    query = session.query(table_class)
+                    filtered_rows = query.all()
+                else:
+                    if not edit_rows_model.filters:
+                        query = None
+                        filtered_rows = []
+                    else:
+                        query = session.query(table_class)
+                        for key, value in edit_rows_model.filters.items():
+                            query = query.filter(getattr(table_class, key) == value)
 
-                filtered_rows = query.all()
+                        filtered_rows = query.all()
                 # ===========================================
                 for row in filtered_rows:
                     for key, value in edit_rows_model.data.items():
@@ -340,11 +356,19 @@ async def delete_rows(delete_rows_model: DeleteRows):
             session = local_object_session()
             try:
                 # get rows from filters
-                query = session.query(table_class)
-                for key, value in delete_rows_model.filters.items():
-                    query = query.filter(getattr(table_class, key) == value)
+                if delete_rows_model.ignore_filters_and_delete_all:
+                    query = session.query(table_class)
+                    filtered_rows = query.all()
+                else:
+                    if not delete_rows_model.filters:
+                        query = None
+                        filtered_rows = []
+                    else:
+                        query = session.query(table_class)
+                        for key, value in delete_rows_model.filters.items():
+                            query = query.filter(getattr(table_class, key) == value)
 
-                filtered_rows = query.all()
+                        filtered_rows = query.all()
                 # ===========================================
                 local_list_filtered_rows = [
                     {
@@ -355,7 +379,8 @@ async def delete_rows(delete_rows_model: DeleteRows):
                     for x in filtered_rows
                 ]
                 # delete all rows at once
-                query.delete()
+                if query:
+                    query.delete()
                 # ===========================================
                 session.commit()
                 session.close()
