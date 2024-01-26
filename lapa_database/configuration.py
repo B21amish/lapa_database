@@ -3,10 +3,16 @@ import importlib
 import os
 import sys
 
+from square_logger.main import SquareLogger
+
 try:
     config = configparser.ConfigParser()
     config_file_path = (
-            os.path.dirname(os.path.abspath(__file__)) + os.sep + "data" + os.sep + "config.ini"
+        os.path.dirname(os.path.abspath(__file__))
+        + os.sep
+        + "data"
+        + os.sep
+        + "config.ini"
     )
     config.read(config_file_path)
 
@@ -23,18 +29,28 @@ try:
 except Exception as e:
     print(
         "\033[91mMissing or incorrect config.ini file, have you tried creating it from config.example.ini?\n"
-        "Error details: " + str(e) + "\033[0m")
+        "Error details: " + str(e) + "\033[0m"
+    )
     sys.exit()
+
+global_object_square_logger = SquareLogger("lapa_database")
 
 # extra logic for this module
 
 try:
     database_structure_module = importlib.import_module(config_str_database_module_name)
-    database_structure_main_file = importlib.import_module(config_str_database_module_name + ".main")
+    database_structure_main_file = importlib.import_module(
+        config_str_database_module_name + ".main"
+    )
 except Exception as e:
     print(
-        "\033[91mUnable to import " + config_str_database_module_name + ".\n" +
-        "This package needs a specialized package with the pydantic models of all tables.\n" +
-        "Install it and update config.ini -> `DATABASE_PACKAGE_NAME` to initiate this package.\n" +
-        "Error details: " + str(e) + "\033[0m")
+        "\033[91mUnable to import "
+        + config_str_database_module_name
+        + ".\n"
+        + "This package needs a specialized package with the pydantic models of all tables.\n"
+        + "Install it and update config.ini -> `DATABASE_PACKAGE_NAME` to initiate this package.\n"
+        + "Error details: "
+        + str(e)
+        + "\033[0m"
+    )
     sys.exit()

@@ -1,41 +1,41 @@
 import psycopg2
-from square_logger.main import SquareLogger
 
-from lapa_database.configuration import (
-    config_str_log_file_name
-)
-
-local_object_square_logger = SquareLogger(config_str_log_file_name)
+from lapa_database.configuration import global_object_square_logger
 
 
-def is_trigger_exists(lobj_cursor,
-                      lstr_trigger_name: str):
+def is_trigger_exists(lobj_cursor, lstr_trigger_name: str):
     try:
-        lobj_cursor.execute("""SELECT 1 FROM pg_trigger WHERE tgname = %s;""", (lstr_trigger_name,))
+        lobj_cursor.execute(
+            """SELECT 1 FROM pg_trigger WHERE tgname = %s;""", (lstr_trigger_name,)
+        )
         return lobj_cursor.fetchone() is not None
 
     except Exception:
         raise
 
 
-def create_trigger_in_db(pstr_database_host: str,
-                         pstr_database_port: str,
-                         pstr_database_name: str,
-                         pstr_database_username: str,
-                         pstr_database_password: str,
-                         pstr_table_name: str):
+def create_trigger_in_db(
+    pstr_database_host: str,
+    pstr_database_port: str,
+    pstr_database_name: str,
+    pstr_database_username: str,
+    pstr_database_password: str,
+    pstr_table_name: str,
+):
     try:
-        lstr_trigger_function_name = f'notify_{pstr_table_name}_changes'
-        lstr_trigger_name = f'{pstr_table_name}_channel'
+        lstr_trigger_function_name = f"notify_{pstr_table_name}_changes"
+        lstr_trigger_name = f"{pstr_table_name}_channel"
 
         # ================================================================
         # Replace the connection parameters with database connection details
         # ================================================================
-        lobj_connection = psycopg2.connect(host=pstr_database_host,
-                                           port=pstr_database_port,
-                                           database=pstr_database_name,
-                                           user=pstr_database_username,
-                                           password=pstr_database_password)
+        lobj_connection = psycopg2.connect(
+            host=pstr_database_host,
+            port=pstr_database_port,
+            database=pstr_database_name,
+            user=pstr_database_username,
+            password=pstr_database_password,
+        )
 
         try:
             with lobj_connection.cursor() as lobj_cursor:
@@ -43,7 +43,8 @@ def create_trigger_in_db(pstr_database_host: str,
                 # Trigger function
                 # ================================================================
                 if not is_trigger_exists(lobj_cursor, lstr_trigger_function_name):
-                    lobj_cursor.execute(f"""
+                    lobj_cursor.execute(
+                        f"""
                             CREATE OR REPLACE FUNCTION {lstr_trigger_function_name}() RETURNS TRIGGER AS $$
                             DECLARE
                                 payload JSONB;
@@ -61,33 +62,40 @@ def create_trigger_in_db(pstr_database_host: str,
                                 RETURN NEW;
                             END;
                             $$ LANGUAGE plpgsql;
-                        """)
-                    local_object_square_logger.logger.info(
-                        f"Trigger function created successfully, trigger function name - {str(lstr_trigger_function_name)}")
+                        """
+                    )
+                    global_object_square_logger.logger.info(
+                        f"Trigger function created successfully, trigger function name - {str(lstr_trigger_function_name)}"
+                    )
 
                 else:
-                    local_object_square_logger.logger.warning(
+                    global_object_square_logger.logger.warning(
                         f"Trigger function already exists, trigger function name - {str(lstr_trigger_function_name)}."
-                        " Not creating the trigger function again.")
+                        " Not creating the trigger function again."
+                    )
 
                 # ================================================================
                 # Trigger
                 # ================================================================
                 if not is_trigger_exists(lobj_cursor, lstr_trigger_name):
-                    lobj_cursor.execute(f"""
+                    lobj_cursor.execute(
+                        f"""
                             CREATE TRIGGER {lstr_trigger_name}
                             AFTER INSERT OR UPDATE OR DELETE
                             ON {pstr_table_name}
                             FOR EACH ROW
                             EXECUTE FUNCTION {lstr_trigger_function_name}();
-                        """)
-                    local_object_square_logger.logger.info(
-                        f"Trigger created successfully, trigger name - {str(lstr_trigger_name)}")
+                        """
+                    )
+                    global_object_square_logger.logger.info(
+                        f"Trigger created successfully, trigger name - {str(lstr_trigger_name)}"
+                    )
 
                 else:
-                    local_object_square_logger.logger.warning(
+                    global_object_square_logger.logger.warning(
                         f"Trigger already exists, trigger name - {str(lstr_trigger_name)}."
-                        " Not creating the trigger again.")
+                        " Not creating the trigger again."
+                    )
 
             lobj_connection.commit()
 
