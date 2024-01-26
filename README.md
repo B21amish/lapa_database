@@ -29,10 +29,16 @@ database layer for my personal server.
 
 ## changelog
 
+### v0.0.5
+
+- make crud logic default to no rows when filters are empty.
+- add new parameters to make it easy to select all rows for edit, delete and get.
+- move logger to configuration.py to fix bug of multiple logs being created.
+
 ### v0.0.4
 
 - rename to lapa database.
-- fix bug in create_database that occured in default data insertion.
+- fix bug in create_database that occurred in default data insertion.
 - add logs to gitignore.
 - change psycopg2 to psycopg2-binary in setup.py.
 
@@ -45,7 +51,8 @@ database layer for my personal server.
     - /ws/<database_name>/<table_name>/<schema_name>
       - E.g. /ws/game/player/public
   - initially returns all the rows and if any update is made it returns the updated data.
-  - trigger creation is implemented once the websocket connection is made. it will first check if the trigger function already exists or not and then only create.
+  - trigger creation is implemented once the websocket connection is made. it will first check if the trigger function
+    already exists or not and then only create.
 
 ### v0.0.2
 
