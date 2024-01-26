@@ -576,7 +576,6 @@ async def get_rows_using_websocket(
 
 if __name__ == "__main__":
     try:
-        global_object_square_logger.logger.critical("hello")
         if config_bool_create_schema:
             create_database_and_tables()
 
