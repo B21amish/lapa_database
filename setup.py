@@ -1,10 +1,10 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 package_name = "lapa_database"
 
 setup(
     name=package_name,
-    version="0.0.4",
+    version="0.0.5",
     packages=find_packages(),
     package_data={
         package_name: ["data/*", "pydantic_models/*"],
