@@ -29,6 +29,10 @@ database layer for my personal server.
 
 ## changelog
 
+### v0.0.6
+
+- change default value of ignore_filters_and_get_all to False.
+
 ### v0.0.5
 
 - make crud logic default to no rows when filters are empty.
