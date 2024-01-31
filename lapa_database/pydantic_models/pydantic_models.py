@@ -17,7 +17,7 @@ class GetRows(BaseModel):
     table_name: database_structure_main_file.TablesEnum
     schema_name: database_structure_main_file.SchemaEnum
     filters: dict
-    ignore_filters_and_get_all: bool = True
+    ignore_filters_and_get_all: bool = False
 
 
 class EditRows(BaseModel):
