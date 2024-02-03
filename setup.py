@@ -4,7 +4,7 @@ package_name = "lapa_database"
 
 setup(
     name=package_name,
-    version="0.0.6",
+    version="0.0.7",
     packages=find_packages(),
     package_data={
         package_name: ["data/*", "pydantic_models/*"],
@@ -17,6 +17,7 @@ setup(
         "python-multipart>=0.0.6",
         "square_logger~=1.0",
         "websockets>=12.0",
+        "lapa_commons>=0.0.1",
     ],
     extras_require={
         "all": [

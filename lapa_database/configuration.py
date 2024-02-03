@@ -3,6 +3,7 @@ import importlib
 import os
 import sys
 
+from lapa_commons.main import read_configuration_from_file_path
 from square_logger.main import SquareLogger
 
 try:
@@ -14,18 +15,22 @@ try:
         + os.sep
         + "config.ini"
     )
-    config.read(config_file_path)
+    ldict_configuration = read_configuration_from_file_path(config_file_path)
 
     # get all vars and typecast
-    config_str_host_ip = config.get("ENVIRONMENT", "HOST_IP")
-    config_int_host_port = int(config.get("ENVIRONMENT", "HOST_PORT"))
-    config_str_db_ip = config.get("ENVIRONMENT", "DB_IP")
-    config_int_db_port = int(config.get("ENVIRONMENT", "DB_PORT"))
-    config_str_db_username = config.get("ENVIRONMENT", "DB_USERNAME")
-    config_str_db_password = config.get("ENVIRONMENT", "DB_PASSWORD")
-    config_str_log_file_name = config.get("ENVIRONMENT", "LOG_FILE_NAME")
-    config_bool_create_schema = eval(config.get("ENVIRONMENT", "CREATE_SCHEMA"))
-    config_str_database_module_name = config.get("ENVIRONMENT", "DATABASE_PACKAGE_NAME")
+    config_str_host_ip = ldict_configuration["ENVIRONMENT"]["HOST_IP"]
+    config_int_host_port = int(ldict_configuration["ENVIRONMENT"]["HOST_PORT"])
+    config_str_db_ip = ldict_configuration["ENVIRONMENT"]["DB_IP"]
+    config_int_db_port = int(ldict_configuration["ENVIRONMENT"]["DB_PORT"])
+    config_str_db_username = ldict_configuration["ENVIRONMENT"]["DB_USERNAME"]
+    config_str_db_password = ldict_configuration["ENVIRONMENT"]["DB_PASSWORD"]
+    config_str_log_file_name = ldict_configuration["ENVIRONMENT"]["LOG_FILE_NAME"]
+    config_bool_create_schema = eval(
+        ldict_configuration["ENVIRONMENT"]["CREATE_SCHEMA"]
+    )
+    config_str_database_module_name = ldict_configuration["ENVIRONMENT"][
+        "DATABASE_PACKAGE_NAME"
+    ]
 except Exception as e:
     print(
         "\033[91mMissing or incorrect config.ini file, have you tried creating it from config.example.ini?\n"
