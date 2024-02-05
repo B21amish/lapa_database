@@ -29,6 +29,13 @@ database layer for my personal server.
 
 ## changelog
 
+### v0.0.8
+
+- add module name in config.
+- add first test case.
+- add dependencies for testing.
+- add github workflow for testing.
+
 ### v0.0.7
 
 - use lapa_commons to read config.
