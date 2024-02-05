@@ -18,6 +18,8 @@ setup(
         "square_logger~=1.0",
         "websockets>=12.0",
         "lapa_commons>=0.0.1",
+        "httpx>=0.26.0",
+        "pytest>=8.0.0",
     ],
     extras_require={
         "all": [
