@@ -18,6 +18,7 @@ try:
     ldict_configuration = read_configuration_from_file_path(config_file_path)
 
     # get all vars and typecast
+    config_str_module_name = ldict_configuration["GENERAL"]["MODULE_NAME"]
     config_str_host_ip = ldict_configuration["ENVIRONMENT"]["HOST_IP"]
     config_int_host_port = int(ldict_configuration["ENVIRONMENT"]["HOST_PORT"])
     config_str_db_ip = ldict_configuration["ENVIRONMENT"]["DB_IP"]

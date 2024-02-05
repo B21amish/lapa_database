@@ -23,6 +23,7 @@ from lapa_database.configuration import (
     config_str_db_username,
     config_str_host_ip,
     global_object_square_logger,
+    config_str_module_name,
 )
 from lapa_database.create_database import create_database_and_tables
 from lapa_database.pydantic_models.pydantic_models import (
@@ -414,7 +415,7 @@ async def delete_rows(delete_rows_model: DeleteRows):
 @global_object_square_logger.async_auto_logger
 async def root():
     return JSONResponse(
-        status_code=status.HTTP_200_OK, content={"text": "lapa_database"}
+        status_code=status.HTTP_200_OK, content={"text": config_str_module_name}
     )
 
 
