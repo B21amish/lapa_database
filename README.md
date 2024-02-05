@@ -34,7 +34,8 @@ database layer for my personal server.
 - add module name in config.
 - add first test case.
 - add dependencies for testing.
-- add github workflow for testing.
+- add GitHub workflow for testing.
+- remove config from gitignore.
 
 ### v0.0.7
 
