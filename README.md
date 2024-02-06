@@ -10,7 +10,7 @@ database layer for my personal server.
 
 ## usage (WIP)
 
-### config.example.ini to config.ini.
+### change password in config.ini.
 
 ### CREATE_SCHEMA = True to create database from scratch.
 
