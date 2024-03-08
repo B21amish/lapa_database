@@ -20,7 +20,7 @@ database layer for my personal server.
 
 ## configs
 
-1. lapa_database\data\config.ini (can be created using lapa_database\data\config.example.ini)
+1. lapa_database\data\config.ini
 2. lapa_logger\data\config.ini
 
 ## env
@@ -28,6 +28,11 @@ database layer for my personal server.
 - python>=3.12.0
 
 ## changelog
+
+### v0.0.9
+
+- removed config.example.ini.
+- bug fix: create_database -> data insertion now takes schema into account.
 
 ### v0.0.8
 

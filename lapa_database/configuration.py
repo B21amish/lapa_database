@@ -34,7 +34,7 @@ try:
     ]
 except Exception as e:
     print(
-        "\033[91mMissing or incorrect config.ini file, have you tried creating it from config.example.ini?\n"
+        "\033[91mMissing or incorrect config.ini file.\n"
         "Error details: " + str(e) + "\033[0m"
     )
     sys.exit()

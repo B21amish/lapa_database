@@ -87,7 +87,7 @@ def create_database_and_tables():
                     )
 
                     inspector = inspect(database_engine)
-                    existing_table_names = inspector.get_table_names()
+                    existing_table_names = inspector.get_table_names(schema=local_str_schema_name)
 
                     tables_module_path = (
                         f"{config_str_database_module_name}"
