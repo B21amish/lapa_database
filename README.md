@@ -29,6 +29,12 @@ database layer for my personal server.
 
 ## changelog
 
+### v0.0.10
+
+- removed import for main file from config.
+- removed validation for table names in crud call in pydantic models.
+- adjust all crud calls to account for pydantic model change from enum to str.
+
 ### v0.0.9
 
 - removed config.example.ini.

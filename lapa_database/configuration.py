@@ -9,11 +9,11 @@ from square_logger.main import SquareLogger
 try:
     config = configparser.ConfigParser()
     config_file_path = (
-        os.path.dirname(os.path.abspath(__file__))
-        + os.sep
-        + "data"
-        + os.sep
-        + "config.ini"
+            os.path.dirname(os.path.abspath(__file__))
+            + os.sep
+            + "data"
+            + os.sep
+            + "config.ini"
     )
     ldict_configuration = read_configuration_from_file_path(config_file_path)
 
@@ -45,9 +45,6 @@ global_object_square_logger = SquareLogger("lapa_database")
 
 try:
     database_structure_module = importlib.import_module(config_str_database_module_name)
-    database_structure_main_file = importlib.import_module(
-        config_str_database_module_name + ".main"
-    )
 except Exception as e:
     print(
         "\033[91mUnable to import "

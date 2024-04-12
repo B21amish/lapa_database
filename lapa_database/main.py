@@ -52,7 +52,7 @@ async def insert_rows(insert_rows_model: InsertRows):
     try:
         local_str_database_url = (
             f"postgresql://{config_str_db_username}:{config_str_db_password}@"
-            f"{config_str_db_ip}:{str(config_int_db_port)}/{insert_rows_model.database_name.value}"
+            f"{config_str_db_ip}:{str(config_int_db_port)}/{insert_rows_model.database_name}"
         )
         database_engine = create_engine(local_str_database_url)
 
@@ -62,7 +62,7 @@ async def insert_rows(insert_rows_model: InsertRows):
             try:
                 # Connect to schema
                 database_connection.execute(
-                    text(f"SET search_path TO {insert_rows_model.schema_name.value}")
+                    text(f"SET search_path TO {insert_rows_model.schema_name}")
                 )
                 # ===========================================
             except OperationalError:
@@ -72,11 +72,11 @@ async def insert_rows(insert_rows_model: InsertRows):
                 )
             try:
                 table_class_name = snake_to_capital_camel(
-                    insert_rows_model.table_name.value
+                    insert_rows_model.table_name
                 )
                 table_module_path = (
-                    f"{config_str_database_module_name}.{insert_rows_model.database_name.value}"
-                    f".{insert_rows_model.schema_name.value}.tables"
+                    f"{config_str_database_module_name}.{insert_rows_model.database_name}"
+                    f".{insert_rows_model.schema_name}.tables"
                 )
                 table_module = importlib.import_module(table_module_path)
                 table_class = getattr(table_module, table_class_name)
@@ -132,7 +132,7 @@ async def get_rows(get_rows_model: GetRows):
     try:
         local_str_database_url = (
             f"postgresql://{config_str_db_username}:{config_str_db_password}@"
-            f"{config_str_db_ip}:{str(config_int_db_port)}/{get_rows_model.database_name.value}"
+            f"{config_str_db_ip}:{str(config_int_db_port)}/{get_rows_model.database_name}"
         )
         database_engine = create_engine(local_str_database_url)
         # Connect to database
@@ -141,7 +141,7 @@ async def get_rows(get_rows_model: GetRows):
             try:
                 # Connect to schema
                 database_connection.execute(
-                    text(f"SET search_path TO {get_rows_model.schema_name.value}")
+                    text(f"SET search_path TO {get_rows_model.schema_name}")
                 )
                 # ===========================================
 
@@ -152,11 +152,11 @@ async def get_rows(get_rows_model: GetRows):
                 )
             try:
                 table_class_name = snake_to_capital_camel(
-                    get_rows_model.table_name.value
+                    get_rows_model.table_name
                 )
                 table_module_path = (
-                    f"{config_str_database_module_name}.{get_rows_model.database_name.value}"
-                    f".{get_rows_model.schema_name.value}.tables"
+                    f"{config_str_database_module_name}.{get_rows_model.database_name}"
+                    f".{get_rows_model.schema_name}.tables"
                 )
                 table_module = importlib.import_module(table_module_path)
                 table_class = getattr(table_module, table_class_name)
@@ -222,7 +222,7 @@ async def edit_rows(edit_rows_model: EditRows):
     try:
         local_str_database_url = (
             f"postgresql://{config_str_db_username}:{config_str_db_password}@"
-            f"{config_str_db_ip}:{str(config_int_db_port)}/{edit_rows_model.database_name.value}"
+            f"{config_str_db_ip}:{str(config_int_db_port)}/{edit_rows_model.database_name}"
         )
         database_engine = create_engine(local_str_database_url)
         # Connect to database
@@ -231,7 +231,7 @@ async def edit_rows(edit_rows_model: EditRows):
             try:
                 # Connect to schema
                 database_connection.execute(
-                    text(f"SET search_path TO {edit_rows_model.schema_name.value}")
+                    text(f"SET search_path TO {edit_rows_model.schema_name}")
                 )
                 # ===========================================
 
@@ -242,11 +242,11 @@ async def edit_rows(edit_rows_model: EditRows):
                 )
             try:
                 table_class_name = snake_to_capital_camel(
-                    edit_rows_model.table_name.value
+                    edit_rows_model.table_name
                 )
                 table_module_path = (
-                    f"{config_str_database_module_name}.{edit_rows_model.database_name.value}"
-                    f".{edit_rows_model.schema_name.value}.tables"
+                    f"{config_str_database_module_name}.{edit_rows_model.database_name}"
+                    f".{edit_rows_model.schema_name}.tables"
                 )
                 table_module = importlib.import_module(table_module_path)
                 table_class = getattr(table_module, table_class_name)
@@ -320,7 +320,7 @@ async def delete_rows(delete_rows_model: DeleteRows):
     try:
         local_str_database_url = (
             f"postgresql://{config_str_db_username}:{config_str_db_password}@"
-            f"{config_str_db_ip}:{str(config_int_db_port)}/{delete_rows_model.database_name.value}"
+            f"{config_str_db_ip}:{str(config_int_db_port)}/{delete_rows_model.database_name}"
         )
         database_engine = create_engine(local_str_database_url)
         # Connect to database
@@ -329,7 +329,7 @@ async def delete_rows(delete_rows_model: DeleteRows):
             try:
                 # Connect to schema
                 database_connection.execute(
-                    text(f"SET search_path TO {delete_rows_model.schema_name.value}")
+                    text(f"SET search_path TO {delete_rows_model.schema_name}")
                 )
                 # ===========================================
 
@@ -340,11 +340,11 @@ async def delete_rows(delete_rows_model: DeleteRows):
                 )
             try:
                 table_class_name = snake_to_capital_camel(
-                    delete_rows_model.table_name.value
+                    delete_rows_model.table_name
                 )
                 table_module_path = (
-                    f"{config_str_database_module_name}.{delete_rows_model.database_name.value}"
-                    f".{delete_rows_model.schema_name.value}.tables"
+                    f"{config_str_database_module_name}.{delete_rows_model.database_name}"
+                    f".{delete_rows_model.schema_name}.tables"
                 )
                 table_module = importlib.import_module(table_module_path)
                 table_class = getattr(table_module, table_class_name)
@@ -422,7 +422,7 @@ async def root():
 @app.websocket("/ws/{database_name}/{table_name}/{schema_name}")
 @global_object_square_logger.async_auto_logger
 async def get_rows_using_websocket(
-    websocket: WebSocket, database_name: str, table_name: str, schema_name: str
+        websocket: WebSocket, database_name: str, table_name: str, schema_name: str
 ):
     """
     Author: Lav Sharma
