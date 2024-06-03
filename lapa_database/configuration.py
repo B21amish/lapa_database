@@ -3,8 +3,8 @@ import importlib
 import os
 import sys
 
-from lapa_commons.main import read_configuration_from_file_path
-from square_logger.main import SquareLogger
+from lapa_commons import read_configuration_from_file_path
+from square_logger import SquareLogger
 
 try:
     config = configparser.ConfigParser()
@@ -18,7 +18,13 @@ try:
     ldict_configuration = read_configuration_from_file_path(config_file_path)
 
     # get all vars and typecast
+    # ===========================================
+    # general
     config_str_module_name = ldict_configuration["GENERAL"]["MODULE_NAME"]
+    # ===========================================
+
+    # ===========================================
+    # environment
     config_str_host_ip = ldict_configuration["ENVIRONMENT"]["HOST_IP"]
     config_int_host_port = int(ldict_configuration["ENVIRONMENT"]["HOST_PORT"])
     config_str_db_ip = ldict_configuration["ENVIRONMENT"]["DB_IP"]
@@ -32,6 +38,14 @@ try:
     config_str_database_module_name = ldict_configuration["ENVIRONMENT"][
         "DATABASE_PACKAGE_NAME"
     ]
+    # ===========================================
+
+    # ===========================================
+    # square_logger
+    config_int_log_level = int(ldict_configuration["SQUARE_LOGGER"]["LOG_LEVEL"])
+    config_str_log_path = ldict_configuration["SQUARE_LOGGER"]["LOG_PATH"]
+    config_int_log_backup_count = int(ldict_configuration["SQUARE_LOGGER"]["LOG_BACKUP_COUNT"])
+    # ===========================================
 except Exception as e:
     print(
         "\033[91mMissing or incorrect config.ini file.\n"
@@ -39,7 +53,10 @@ except Exception as e:
     )
     sys.exit()
 
-global_object_square_logger = SquareLogger("lapa_database")
+global_object_square_logger = SquareLogger(pstr_log_file_name=config_str_module_name,
+                                           pint_log_level=config_int_log_level,
+                                           pstr_log_path=config_str_log_path,
+                                           pint_log_backup_count=config_int_log_backup_count)
 
 # extra logic for this module
 
