@@ -15,15 +15,16 @@ setup(
         "uvicorn>=0.24.0.post1",
         "fastapi>=0.104.1",
         "python-multipart>=0.0.6",
-        "square_logger~=1.0",
         "websockets>=12.0",
-        "lapa_commons>=0.0.1",
         "httpx>=0.26.0",
         "pytest>=8.0.0",
+
+        "square_logger>=1.0.0",
+        "lapa_commons>=0.0.3",
     ],
     extras_require={
         "all": [
-            "lapa_database_structure~=0.0.1",
+            "lapa_database_structure>=0.0.1",
         ],
     },
     author="thePmSquare, Amish Palkar, Lav Sharma, Aaditya Sangsihetty",
