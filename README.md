@@ -28,6 +28,10 @@ lapa_database\data\config.ini
 
 ## changelog
 
+### v0.0.12
+
+- fix bug in reading log_file_name.
+
 ### v0.0.11
 
 - add square_logger section in environment and initialise logger as per those variables.
