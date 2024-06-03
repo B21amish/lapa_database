@@ -18,16 +18,21 @@ database layer for my personal server.
 
 ### link to lapa_database_structure
 
-## configs
+## config
 
-1. lapa_database\data\config.ini
-2. lapa_logger\data\config.ini
+lapa_database\data\config.ini
 
 ## env
 
 - python>=3.12.0
 
 ## changelog
+
+### v0.0.11
+
+- add square_logger section in environment and initialise logger as per those variables.
+- keep logger and lapa_database_structure as >= instead of ~=.
+- update minimum version for lapa_commons.
 
 ### v0.0.10
 
