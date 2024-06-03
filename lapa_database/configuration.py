@@ -53,7 +53,7 @@ except Exception as e:
     )
     sys.exit()
 
-global_object_square_logger = SquareLogger(pstr_log_file_name=config_str_module_name,
+global_object_square_logger = SquareLogger(pstr_log_file_name=config_str_log_file_name,
                                            pint_log_level=config_int_log_level,
                                            pstr_log_path=config_str_log_path,
                                            pint_log_backup_count=config_int_log_backup_count)
