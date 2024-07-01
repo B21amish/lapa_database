@@ -28,6 +28,10 @@ lapa_database\data\config.ini
 
 ## changelog
 
+### v0.0.14
+
+- bug fix in config file support.
+
 ### v0.0.13
 
 - https support.
