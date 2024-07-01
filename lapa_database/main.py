@@ -1,6 +1,7 @@
 import asyncio
 import importlib
 import json
+import os.path
 from threading import Thread
 
 from fastapi import FastAPI, WebSocket, status
@@ -24,6 +25,8 @@ from lapa_database.configuration import (
     config_str_host_ip,
     global_object_square_logger,
     config_str_module_name,
+    config_str_ssl_crt_file_path,
+    config_str_ssl_key_file_path,
 )
 from lapa_database.create_database import create_database_and_tables
 from lapa_database.pydantic_models.pydantic_models import (
@@ -71,9 +74,7 @@ async def insert_rows(insert_rows_model: InsertRows):
                     detail="incorrect schema name.",
                 )
             try:
-                table_class_name = snake_to_capital_camel(
-                    insert_rows_model.table_name
-                )
+                table_class_name = snake_to_capital_camel(insert_rows_model.table_name)
                 table_module_path = (
                     f"{config_str_database_module_name}.{insert_rows_model.database_name}"
                     f".{insert_rows_model.schema_name}.tables"
@@ -151,9 +152,7 @@ async def get_rows(get_rows_model: GetRows):
                     detail="incorrect schema name.",
                 )
             try:
-                table_class_name = snake_to_capital_camel(
-                    get_rows_model.table_name
-                )
+                table_class_name = snake_to_capital_camel(get_rows_model.table_name)
                 table_module_path = (
                     f"{config_str_database_module_name}.{get_rows_model.database_name}"
                     f".{get_rows_model.schema_name}.tables"
@@ -241,9 +240,7 @@ async def edit_rows(edit_rows_model: EditRows):
                     detail="incorrect schema name.",
                 )
             try:
-                table_class_name = snake_to_capital_camel(
-                    edit_rows_model.table_name
-                )
+                table_class_name = snake_to_capital_camel(edit_rows_model.table_name)
                 table_module_path = (
                     f"{config_str_database_module_name}.{edit_rows_model.database_name}"
                     f".{edit_rows_model.schema_name}.tables"
@@ -339,9 +336,7 @@ async def delete_rows(delete_rows_model: DeleteRows):
                     detail="incorrect schema name.",
                 )
             try:
-                table_class_name = snake_to_capital_camel(
-                    delete_rows_model.table_name
-                )
+                table_class_name = snake_to_capital_camel(delete_rows_model.table_name)
                 table_module_path = (
                     f"{config_str_database_module_name}.{delete_rows_model.database_name}"
                     f".{delete_rows_model.schema_name}.tables"
@@ -422,7 +417,7 @@ async def root():
 @app.websocket("/ws/{database_name}/{table_name}/{schema_name}")
 @global_object_square_logger.async_auto_logger
 async def get_rows_using_websocket(
-        websocket: WebSocket, database_name: str, table_name: str, schema_name: str
+    websocket: WebSocket, database_name: str, table_name: str, schema_name: str
 ):
     """
     Author: Lav Sharma
@@ -579,8 +574,22 @@ if __name__ == "__main__":
     try:
         if config_bool_create_schema:
             create_database_and_tables()
-
-        run(app, host=config_str_host_ip, port=config_int_host_port)
+        if os.path.exists(config_str_ssl_key_file_path) and os.path.exists(
+            config_str_ssl_key_file_path
+        ):
+            run(
+                app,
+                host=config_str_host_ip,
+                port=config_int_host_port,
+                ssl_certfile=config_str_ssl_crt_file_path,
+                ssl_keyfile=config_str_ssl_key_file_path,
+            )
+        else:
+            run(
+                app,
+                host=config_str_host_ip,
+                port=config_int_host_port,
+            )
 
     except Exception as exc:
         global_object_square_logger.logger.critical(exc, exc_info=True)

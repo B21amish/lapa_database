@@ -38,6 +38,13 @@ try:
     config_str_database_module_name = ldict_configuration["ENVIRONMENT"][
         "DATABASE_PACKAGE_NAME"
     ]
+    config_str_ssl_crt_file_path = ldict_configuration["ENVIRONMENT"][
+        "SSL_CRT_FILE_PATH"
+    ]
+    config_str_ssl_key_file_path = ldict_configuration["ENVIRONMENT"][
+        "SSL_KEY_FILE_PATH"
+    ]
+
     # ===========================================
 
     # ===========================================
