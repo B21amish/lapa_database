@@ -4,7 +4,7 @@ package_name = "lapa_database"
 
 setup(
     name=package_name,
-    version="0.0.12",
+    version="0.0.13",
     packages=find_packages(),
     package_data={
         package_name: ["data/*", "pydantic_models/*"],
@@ -18,7 +18,6 @@ setup(
         "websockets>=12.0",
         "httpx>=0.26.0",
         "pytest>=8.0.0",
-
         "square_logger>=1.0.0",
         "lapa_commons>=0.0.3",
     ],
@@ -29,7 +28,7 @@ setup(
     },
     author="thePmSquare, Amish Palkar, Lav Sharma, Aaditya Sangsihetty",
     author_email="thepmsquare@gmail.com, amishpalkar302001@gmail.com, lavsharma2016@gmail.com, "
-                 "adityashetty35@gmail.com",
+    "adityashetty35@gmail.com",
     description="database layer for my personal server.",
     long_description=open("README.md", "r").read(),
     long_description_content_type="text/markdown",
